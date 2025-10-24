@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "Fullstack MERN application for processing XML credit reports",
   "main": "server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server.js",
     "client": "cd client && npm start",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
     "install-client": "cd client && npm install",
+    "postinstall": "npm run install-client",
     "heroku-postbuild": "npm run install-client && npm run build"
   },
   "dependencies": {
