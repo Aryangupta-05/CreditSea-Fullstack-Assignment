@@ -36,14 +36,19 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // MongoDB connection
-mongoose.connect('mongodb+srv://aryangupta050903:onnbKSyk8EBBm4Nz@cluster0.ptfxlcs.mongodb.net/creditsea?retryWrites=true&w=majority', {
+// Use the MONGODB_URI environment variable in production (e.g., Render or Atlas).
+// Fall back to a local MongoDB for development/testing.
+const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/creditsea';
+const usingMongoAtlas = !!process.env.MONGODB_URI;
+
+mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 // MongoDB connection event handlers
 mongoose.connection.on('connected', () => {
-  log.success('Connected to MongoDB Atlas successfully!');
+  log.success(`Connected to MongoDB ${usingMongoAtlas ? 'Atlas' : 'local'} successfully!`);
 });
 
 mongoose.connection.on('error', (err) => {
