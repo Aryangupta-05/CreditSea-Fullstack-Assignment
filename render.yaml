@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: credit-sea-app
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: creditsea
+          property: connectionString
