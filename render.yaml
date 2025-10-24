@@ -2,8 +2,12 @@ services:
   - type: web
     name: credit-sea-app
     env: node
-  # Ensure root deps are installed, then install client deps and build the client
-    buildCommand: npm install && npm run build
+    buildCommand: |
+      npm install
+      cd client && npm install
+      cd client && npm run build
+      mkdir -p /opt/render/project/src/client/build
+      cp -r client/build/* /opt/render/project/src/client/build/
     startCommand: npm start
     envVars:
       - key: NODE_ENV
