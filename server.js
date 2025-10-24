@@ -33,7 +33,34 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Serve static files from the React app
+const clientBuildPath = path.join(__dirname, 'client', 'build');
+log.info('Setting up static file serving from:', { path: clientBuildPath });
+
+// Ensure the client/build directory exists
+if (!fs.existsSync(clientBuildPath)) {
+  log.warn('Client build directory not found, creating:', { path: clientBuildPath });
+  try {
+    fs.mkdirSync(clientBuildPath, { recursive: true });
+  } catch (err) {
+    log.error('Failed to create build directory:', err);
+  }
+}
+
+// Serve static files
+app.use(express.static(clientBuildPath));
+
+// Ensure client/build exists
+try {
+  if (!fs.existsSync(staticPath)) {
+    log.warn('Static build directory not found:', { path: staticPath });
+    fs.mkdirSync(staticPath, { recursive: true });
+    log.info('Created static directory:', { path: staticPath });
+  }
+} catch (error) {
+  log.error('Error checking/creating static directory:', error);
+}
 
 // MongoDB connection
 // Use the MONGODB_URI environment variable in production (e.g., Render or Atlas).

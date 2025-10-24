@@ -6,6 +6,10 @@ client/node_modules/
 client/build/
 dist/
 
+# Ensure client/public is not ignored
+!client/public/
+!client/public/*
+
 # Environment variables
 .env
 .env.local

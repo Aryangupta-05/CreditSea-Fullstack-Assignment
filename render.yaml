@@ -3,11 +3,15 @@ services:
     name: credit-sea-app
     env: node
     buildCommand: |
+      # Install dependencies for both server and client
       npm install
       cd client && npm install
-      cd client && npm run build
-      mkdir -p /opt/render/project/src/client/build
-      cp -r client/build/* /opt/render/project/src/client/build/
+      # Build the React app
+      cd client && CI=false npm run build
+      # Ensure build directory exists and copy files
+      cd ..
+      mkdir -p client/build
+      cp -r client/build/* client/build/
     startCommand: npm start
     envVars:
       - key: NODE_ENV
